@@ -36,31 +36,31 @@ const server = http.createServer((req, res) => {
       break;
     case 'POST':
       let rawData = '';
-      req
-        .on('data', chunk => {
-          rawData = rawData + chunk;
-        })
-        .on('end', () => {
-          const qs = require('querystring');
-          const answer = qs.parse(rawData);
-          const body = answer['name'] + 'さんは' +
-            answer['favorite'] + 'に投票しました';
-          console.info(body);
-          res.write('<!DOCTYPE html><html lang="ja"><body><h1>' +
-            body + '</h1></body></html>');
-          res.end();
-        });
+      req.on('data', (chunk) => {
+
+        rawData = rawData + chunk;
+      }).on('end', () => {
+
+        const qs = require('querystring');
+        const answer = qs.parse(rawData);
+        const body = answer['name'] + 'さんは' +
+          answer['favorite'] + 'に投票しました';
+        console.info(body);
+        res.write('<!DOCTYPE html><html lang="ja"><body><h1>' +
+          body + '</h1></body></html>');
+        res.end();
+      });
       break;
     default:
       break;
   }
-})
-  .on('error', e => {
-    console.error('Server Error', e);
-  })
-  .on('clientError', e => {
-    console.error('Client Error', e);
-  });
+}).on('error', (e) => {
+
+  console.error('Server Error', e);
+}).on('clientError', (e) => {
+
+  console.error('Client Error', e);
+});
 const port = process.env.PORT || 8000;
 server.listen(port, () => {
   console.info('Listening on ' + port);
